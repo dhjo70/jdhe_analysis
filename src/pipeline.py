@@ -67,7 +67,7 @@ def run_local_analysis(target_dir_name: str, output_file_name: str, header_title
                 title = get_exact_title(pdf_path)
                 f.write(f"## {title}\n\n")
                 f.write(f"{analysis_result}\n\n")
-                f.write("<br>\n\n---\n\n")
+                f.write("---\n\n")
                 f.flush()
                 
             tracker.add_paper_result(pdf_path.name, i, status, a_in, a_out, v_in, v_out)
