@@ -1,0 +1,29 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# Environments & Secrets
+.env
+.env.*
+*.secret
+credentials.json
+token.json
+
+# Data folders
+papers/
+results/
+
+# Logs and Backups
+run_history.log
+*.bak
+
+# MacOS specific files
+.DS_Store
+
