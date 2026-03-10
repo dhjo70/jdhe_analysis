@@ -12,7 +12,6 @@ def run_local_analysis(target_dir_name: str, output_file_name: str, header_title
     1. 이어하기(Resume) 기능: 이미 작성된 결과 파일(output_file_name)을 스캔하여 완료된 논문은 건너뜁니다.
     2. 추출 및 요청: 각 PDF에서 텍스트를 추출하고 LLM API (llm_client)에 분석을 요청합니다.
     3. 기록: 분석에 성공하면 즉시 마크다운(MD) 파일에 결과를 덧붙이고, Tracker를 통해 상태를 저장합니다.
-    4. 안정성 확보: API Rate Limit을 피하기 위해 파일 간 15초의 대기 시간을 갖습니다.
     """
     target_dir = Path(target_dir_name)
     output_file = Path(output_file_name)
@@ -70,12 +69,7 @@ def run_local_analysis(target_dir_name: str, output_file_name: str, header_title
                 f.write("---\n\n")
                 f.flush()
                 
-            tracker.add_paper_result(pdf_path.name, i, status, a_in, a_out, v_in, v_out)
-            
-            # API 제한(Rate Limit)을 피하기 위해 대기
-            if i < len(pdf_files):
-                print("API 요청 안정성을 위해 15초 대기합니다...")
-                time.sleep(15)
+            # (Ultra/Advanced 유료 요금제 사용 및 APIError(429) 재시도 로직이 확보되었으므로 인위적인 지연 배제)
             
     print(f"\n모든 분석이 완료되었습니다. 결과는 {output_file} 파일에 저장되었습니다.")
     tracker.conclude_and_print_summary()
