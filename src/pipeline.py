@@ -69,6 +69,8 @@ def run_local_analysis(target_dir_name: str, output_file_name: str, header_title
                 f.write("---\n\n")
                 f.flush()
                 
+            tracker.add_paper_result(pdf_path.name, i, status, a_in, a_out, v_in, v_out)
+            
             # (Ultra/Advanced 유료 요금제 사용 및 APIError(429) 재시도 로직이 확보되었으므로 인위적인 지연 배제)
             
     print(f"\n모든 분석이 완료되었습니다. 결과는 {output_file} 파일에 저장되었습니다.")
