@@ -17,9 +17,9 @@ if not GEMINI_API_KEY:
 client = genai.Client(api_key=GEMINI_API_KEY)
 
 
-def validate_analysis_result(analysis_text: str):
+def validate_analysis_result(analysis_text: str, paper_text: str):
     """
-    Gemini API를 호출하여 생성된 분석 결과(analysis_text)가 사전에 정의된 9가지 검증 기준을 완벽하게 통과하는지 평가합니다.
+    Gemini API를 호출하여 생성된 분석 결과(analysis_text)가 사전에 정의된 10가지 검증 기준을 완벽하게 통과하는지 평가합니다.
     결과는 JSON 포맷으로 강제 반환되며, 통과 여부(is_valid)와 실패 시 그 사유(reason)를 함께 반환합니다.
     (반환값: is_valid, reason, val_in_tokens, val_out_tokens)
     """
@@ -29,7 +29,7 @@ def validate_analysis_result(analysis_text: str):
             print(f"Gemini API로 결과 검증 중... (시도 {attempt+1}/{MAX_RETRIES})")
             validation_response = client.models.generate_content(
                 model=MODEL_NAME,
-                contents=VALIDATION_PROMPT.format(analysis_text=analysis_text),
+                contents=VALIDATION_PROMPT.format(analysis_text=analysis_text, paper_text=paper_text),
                 config=types.GenerateContentConfig(response_mime_type="application/json")
             )
             
@@ -90,7 +90,7 @@ def analyze_paper_with_retry(paper_text: str):
             analysis_text = response.text
             
             # 검증 로직 실행
-            is_valid, reason, val_in_tokens, val_out_tokens = validate_analysis_result(analysis_text)
+            is_valid, reason, val_in_tokens, val_out_tokens = validate_analysis_result(analysis_text, paper_text)
             
             if is_valid:
                 return analysis_text, prompt_tokens, candidate_tokens, val_in_tokens, val_out_tokens
